@@ -1,5 +1,7 @@
 {
+  "include": ["./src/**/*"],
   "compilerOptions": {
+    "allowJs": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -8,8 +10,9 @@
     "stripInternal": true,
     "skipLibCheck": true,
     "target": "esnext",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
     "outDir": "dist",
     "baseUrl": "./",
     "sourceMap": true

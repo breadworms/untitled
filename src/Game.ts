@@ -1,25 +1,29 @@
-import * as readline from 'node:readline';
-
+import Composer from './Composer'
+import Context from './engine/Context'
+import Document from './engine/Document'
 
 export default class Game {
-  async init() {
-    const input = readline.createInterface({ input: process.stdin, output: process.stdout });
+  public async init() {
+    const document = new Document('../content/game.document.js');
+    const context = new Context(await document.decode());
 
-    input.on('line', command => {
-      this.#receiveCommand(command);
-      input.prompt();
+    console.log(`[game] Loaded document with ${context.objects.length} objects.`);
+
+    const composer = new Composer();
+
+    composer.on('command', (args: string) => {
+      const [command, objId, ...playerArgs] = args.split(' ');
+      const obj = context.getObjectById(objId);
+
+      if (obj === undefined) {
+        console.log(`You don't know what "${objId}" is.`);
+      } else {
+        console.log(obj.interact(command, playerArgs));
+      }
     });
-
-    input.on('close', this.destroy.bind(this));
-
-    input.prompt();
   }
 
-  async destroy() {
+  public async destroy() {
     console.log('Goodbye!...');
-  }
-
-  #receiveCommand(command: string) {
-    console.log(command);
   }
 }
